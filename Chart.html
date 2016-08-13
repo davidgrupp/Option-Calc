@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Option Chart</title>
+		
+</head>
+<body ng-app='root' style="height:100%">
+
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+    integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+    crossorigin="anonymous"></script>
+		
+	<script>
+        $(function(){
+            var options = [
+                { "BuyType" : "Buy", "SecurityType" :"Call", "Quantity" : -1, "Strike" : 100, "Price" : 12.8216 },
+                { "BuyType" : "Sell", "SecurityType" :"Call", "Quantity" : 0, "Strike" : 120, "Price" : 5.9976 },
+                { "BuyType" : "Sell", "SecurityType" :"Put", "Quantity" : 0, "Strike" : 110, "Price" : 16.686 },
+            ];
+            
+            var points = [{"X" : 0, "Y" : OptionProfit(0, options)}];
+            for(var i = 0; i < options.length; i++){
+                var strike = options[i].Strike;
+                points.push({"X" : strike, "Y" : OptionProfit(strike, options)});
+            }
+            points.push({"X" : 1000*1000, "Y" : OptionProfit(1000*1000, options)});
+
+            console.log(points);
+            $.each(points, function(i,point) {
+                console.log(point);
+            });
+
+        });
+
+        function OptionProfit(value, options){
+            var profit = 0;
+            for(var i = 0; i < options.length; i++){
+                var strike = options[i].Strike;
+                var quantity = options[i].Quantity;
+                //var buyMultiplier = options[i].BuyType == "Buy" ? 1 : -1;
+                var pricePaid = options[i].Price;
+                if(options[i].SecurityType == "Call")
+                    profit += CallProfit(value, strike, pricePaid, options[i].BuyType, quantity);
+                if(options[i].SecurityType == "Put")
+                    profit += CallProfit(value, strike, pricePaid, options[i].BuyType, quantity);
+            }
+            return profit;
+        }
+        function CallProfit(value, strike, optionPrice, type, quantity){
+            if ((value > strike && type == "Buy") || (value < strike && type == "Sell")){
+                var v = (value - strike - optionPrice) * quantity;// * 100;
+                console.log({value : value, strike : strike, price : optionPrice, profit: v, ITM: true});
+                return v; 
+            }else{
+                var v = -1 * optionPrice * quantity;// * 100;
+                console.log({value : value, strike : strike, price : optionPrice, profit: v, ITM: false});
+                return v; //expired
+            }
+        }
+
+        function PutProfit(value, option, quantity){
+            if ((value < strike && type == "Buy") || (value < strike && type == "Sell")){
+                var v = (value - strike - optionPrice) * quantity;// * 100;
+                console.log({value : value, strike : strike, price : optionPrice, profit: v, ITM: true});
+                return v; 
+            }else{
+                var v = -1 * optionPrice * quantity;// * 100;
+                console.log({value : value, strike : strike, price : optionPrice, profit: v, ITM: false});
+                return v; //expired
+            }
+        }
+
+        function StockProfit(value, option, quantity){
+            return (value - optionPrice) * quantity;
+        }
+    </script>
+	
+</body>
+</html>
