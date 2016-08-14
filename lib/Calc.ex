@@ -1,5 +1,12 @@
 defmodule OptionCalc.Calc do
     
+    def strategy_profit(value, options) do
+        options 
+        |> Enum.map(fn o -> option_value(value, o.strike, o.price, o.type, o.quantity) end)
+        |> Enum.reduce(&+/2)
+    end
+    
+    
     def option_value(_, _, _, _, quantity) when quantity == 0, do: 0
     
     #call buy ITM

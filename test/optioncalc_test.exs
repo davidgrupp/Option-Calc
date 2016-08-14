@@ -2,6 +2,17 @@ defmodule OptioncalcTest do
   use ExUnit.Case
   #doctest OptionCalc.Calc
 
+  test "Calc strategy_profit" do
+    options = 
+      [%{strike: 100, price: 12.8216, type: "Call", quantity: 1},
+      %{strike: 120, price: 5.9976, type: "Call", quantity: -1}]
+    
+    assert OptionCalc.Calc.strategy_profit(0, options) == -6.824
+    assert OptionCalc.Calc.strategy_profit(100, options) == -6.824
+    assert OptionCalc.Calc.strategy_profit(120, options) |> Float.round(3) == 13.176
+    assert OptionCalc.Calc.strategy_profit(100000, options) |> Float.round(3) == 13.176
+  end
+
   test "Calc option_value" do
     #zero quantity
     assert OptionCalc.Calc.option_value(100, 100, 1, "Call", 0) == 0
