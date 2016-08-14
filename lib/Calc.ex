@@ -22,6 +22,5 @@ defmodule OptionCalc.Calc do
         -1 * option_value(value, strike, price, type, -1 * quantity)
     end
 
-    def stock_value(value, price, quantity), do: (value- price) * quantity
-
+    def stock_value(value, price, quantity), do: (value - price) * quantity
 end

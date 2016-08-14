@@ -32,10 +32,16 @@ defmodule OptioncalcTest do
     assert OptionCalc.Calc.stock_value(0, 100, 1) == -100
     assert OptionCalc.Calc.stock_value(100, 100, 1) == 0
     assert OptionCalc.Calc.stock_value(120, 100, 1) == 20
+    assert OptionCalc.Calc.stock_value(0, 100, 2) == -200
+    assert OptionCalc.Calc.stock_value(100, 100, 2) == 0
+    assert OptionCalc.Calc.stock_value(120, 100, 2) == 40
     #sold calls
     assert OptionCalc.Calc.stock_value(0, 100, -1) == 100
     assert OptionCalc.Calc.stock_value(100, 100, -1) == 0
     assert OptionCalc.Calc.stock_value(120, 100, -1) == -20
+    assert OptionCalc.Calc.stock_value(0, 100, -2) == 200
+    assert OptionCalc.Calc.stock_value(100, 100, -2) == 0
+    assert OptionCalc.Calc.stock_value(120, 100, -2) == -40
 
   end
 end
