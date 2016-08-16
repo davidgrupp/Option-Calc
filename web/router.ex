@@ -17,10 +17,14 @@ defmodule OptionCalc.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
+    resources "/chart", ChartController
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", OptionCalc do
-  #   pipe_through :api
-  # end
+  scope "/api", OptionCalc do
+    pipe_through :api
+
+    post "/chart/points", ChartController, :points
+  end
 end
