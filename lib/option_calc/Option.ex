@@ -1,5 +1,5 @@
 defmodule OptionCalc.Option do
     
-    defstruct Symbol: nil, Strike: nil, Price: nil, Expiration: nil, Quantity: nil
+    defstruct type: nil, symbol: nil, strike: nil, price: nil, expiration: nil, quantity: nil
 
 end

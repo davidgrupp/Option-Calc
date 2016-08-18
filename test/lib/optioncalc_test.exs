@@ -4,8 +4,8 @@ defmodule OptioncalcTest do
 
   test "Calc strategy_profit" do
     options = 
-      [%{strike: 100, price: 12.8216, type: "Call", quantity: 1},
-      %{strike: 120, price: 5.9976, type: "Call", quantity: -1}]
+      [%OptionCalc.Option{strike: 100, price: 12.8216, type: "Call", quantity: 1},
+      %OptionCalc.Option{strike: 120, price: 5.9976, type: "Call", quantity: -1}]
     
     assert OptionCalc.Calc.strategy_profit(0, options) == -6.824
     assert OptionCalc.Calc.strategy_profit(100, options) == -6.824
