@@ -26,5 +26,6 @@ defmodule OptionCalc.Router do
     pipe_through :api
 
     post "/chart/points", ChartController, :points
+    get "/chart/points", ChartController, :points
   end
 end

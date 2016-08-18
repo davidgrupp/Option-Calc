@@ -1,0 +1,50 @@
+<div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+
+<script>
+    $(function () {
+        var opts = { "options": [
+            {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
+            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Call"},
+            ]};
+        
+        $.post({
+        url: '/api/chart/points',
+        data: JSON.stringify(opts),
+        contentType: 'application/json',
+        success: function(data){
+            console.log(data);
+            var xdata = [];
+            var ydata = [];
+            for(var i = 0; i < data.chart.length; i++){
+                xdata.push(data.chart[i].x);
+                ydata.push(data.chart[i].y);
+            }
+
+            console.log(xdata);
+            console.log(ydata);
+
+            $('#chart').highcharts({
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Area chart with negative values'
+                },
+                xAxis: {
+                    //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+                    categories: xdata
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'John',
+                    data: ydata
+                }]
+            });
+        }});
+    });
+</script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>

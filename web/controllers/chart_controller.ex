@@ -2,7 +2,7 @@ defmodule OptionCalc.ChartController do
   use OptionCalc.Web, :controller
 
   def index(conn, _params) do
-    render conn, "show.html"
+    render conn, "index.html"
   end
 
   def points(conn, %{"options" => options}) when is_list(options) do
