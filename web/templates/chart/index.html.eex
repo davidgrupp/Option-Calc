@@ -3,14 +3,19 @@
 
 <script>
     $(function () {
-        var opts = { "options": [
+        var xStart = 90;
+        var xEnd = 130;
+        
+        var chartData = { 
+        "options": [
             {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
-            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Call"},
-            ]};
+            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Call"} ],
+        "settings": { "startPoint": xStart, "endPoint": xEnd }
+        };
         
         $.post({
         url: '/api/chart/points',
-        data: JSON.stringify(opts),
+        data: JSON.stringify(chartData),
         contentType: 'application/json',
         success: function(data){
             console.log(data);
@@ -41,7 +46,8 @@
                 series: [{
                     name: 'John',
                     data: ydata
-                }]
+                }],
+                
             });
         }});
     });
