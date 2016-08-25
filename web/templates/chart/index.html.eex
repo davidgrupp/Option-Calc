@@ -23,7 +23,7 @@
             var ydata = [];
             for(var i = 0; i < data.chart.length; i++){
                 xdata.push(data.chart[i].x);
-                ydata.push(data.chart[i].y);
+                ydata.push([data.chart[i].x, data.chart[i].y]);
             }
 
             console.log(xdata);
@@ -36,18 +36,62 @@
                 title: {
                     text: 'Area chart with negative values'
                 },
-                xAxis: {
+                /*xAxis: {
                     //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
                     categories: xdata
+                },*/
+                xAxis: {
+                    title: {
+                        enabled: false,
+                        text: "Price"
+                    },
+                    minPadding: 0,
+                    maxPadding: 0,
+                    startOnTick: true,
+                    endOnTick: true,
+                    showLastLabel: false
+                },
+                yAxis: {
+                    title: {
+                        text: "Profit / Loss"
+                    },
+                    minorGridLineWidth: "0px",
+                    plotLines: [{
+                        color: "rgb(180, 90, 180)",
+                        width: 2,
+                        value: 0,
+                        zIndex: 1
+                    }]
                 },
                 credits: {
                     enabled: false
                 },
                 series: [{
-                    name: 'John',
+                    name: 'Expiration',
                     data: ydata
                 }],
-                
+                plotOptions: {
+                    area: {
+                        animation: true,
+                        lineWidth: 3,
+                        allowPointSelect: false,
+                        marker: {
+                            radius: 0,
+                            states: {
+                                hover: { enabled: true, lineColor: "rgb(100,0,100)" }
+                            }
+                        },
+                        states: {
+                            hover: {
+                                marker: { enabled: true }
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: "<b>{series.name}<\/b><br>",
+                            pointFormat: "Price = {point.x}<br />Profit / Loss = {point.y}"
+                        }
+                    }
+                }
             });
         }});
     });

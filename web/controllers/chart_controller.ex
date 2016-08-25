@@ -12,7 +12,7 @@ defmodule OptionCalc.ChartController do
     points = options 
         |> Enum.map(fn %{"strike" => strike, "price" => price, "type"=> type, "quantity"=> quantity} -> 
         %OptionCalc.Option{strike: strike, price: price, type: type, quantity: quantity} end)
-        |> OptionCalc.Chart.points(startPoint, endPoint)
+        |> OptionCalc.Chart.points(startPoint, endPoint, 20)
     
     json conn, %{ chart: points }
   end

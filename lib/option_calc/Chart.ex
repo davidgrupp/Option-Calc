@@ -1,11 +1,17 @@
 defmodule OptionCalc.Chart do
     
-    def points(options, start_point, end_point) do
-        options_profits = options 
-        |> Enum.map(fn o ->%{ x: o.strike, y: OptionCalc.Calc.strategy_profit(o.strike, options) |> Float.round(3) } end)
-        |> Enum.sort(fn p1, p2 -> p1.x < p2.x end)
+    def points(options, start_point, end_point, total_points) do
+        
+        0..total_points - 1
+        |> Enum.map(fn n -> start_point + n * ((end_point - start_point) / (total_points-1)) end)
+        |> Enum.concat(options |> Enum.map(fn o -> o.strike end))
+        |> Enum.map(&(&1 + 0.0))
+        |> Enum.uniq
+        |> Enum.sort
+        |> Enum.map(fn n -> %{ 
+            x: n |> Float.round(3), 
+            y: OptionCalc.Calc.strategy_profit(n, options) |> Float.round(3)
+        } end)
 
-        options_profits = [%{ x: start_point, y: OptionCalc.Calc.strategy_profit(start_point, options) |> Float.round(3) } | options_profits]
-        options_profits ++ [%{ x: end_point, y: OptionCalc.Calc.strategy_profit(end_point, options) |> Float.round(3) }]
     end
 end
