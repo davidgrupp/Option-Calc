@@ -1,21 +1,55 @@
+<div id="positions">
+</div>
 <div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 </div>
+
+<script type="text/html" id="OptionTemplate">
+    <div class="row">
+        <h4>Positions</h4>
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Type" value="${type}" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="text" class="form-control" aria-label="Strike" value="${strike}" />
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="input-group">
+                <span class="input-group-addon">#</span>
+                <input type="text" class="form-control" aria-label="Quantity" value="${quantity}" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="text" class="form-control" aria-label="Price" value="${price}" />
+            </div>
+        </div>
+    </div>
+</script>
 
 <script>
     $(function () {
         var xStart = 90;
         var xEnd = 130;
         
-        var chartData = { 
+        var chartConfig = { 
         "options": [
             {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
             {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Call"} ],
         "settings": { "startPoint": xStart, "endPoint": xEnd }
         };
+
+        var dataTmpl = $('#OptionTemplate').tmpl(chartConfig.options);
+		$('#positions').html(dataTmpl);
         
         $.post({
         url: '/api/chart/points',
-        data: JSON.stringify(chartData),
+        data: JSON.stringify(chartConfig),
         contentType: 'application/json',
         success: function(data){
             console.log(data);
@@ -98,3 +132,5 @@
 </script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/js/bootstrap-select.min.js"></script>
