@@ -1,6 +1,6 @@
 <div id="positions">
 </div>
-<div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
 </div>
 
 <script type="text/html" id="OptionTemplate">
@@ -71,10 +71,6 @@
                 title: {
                     text: 'Area chart with negative values'
                 },
-                /*xAxis: {
-                    //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-                    categories: xdata
-                },*/
                 xAxis: {
                     title: {
                         enabled: false,
