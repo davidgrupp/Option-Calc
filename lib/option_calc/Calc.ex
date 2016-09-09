@@ -2,7 +2,9 @@ defmodule OptionCalc.Calc do
     
     def strategy_profit(value, options) do
         options 
-        |> Enum.map(fn o -> option_value(value, o.strike, o.price, o.type, o.quantity) end)
+        |> Enum.map(fn 
+                %OptionCalc.Option{ type: "Stock"} =    o -> stock_value(value, o.price, o.quantity)
+                                                        o -> option_value(value, o.strike, o.price, o.type, o.quantity) end)
         |> Enum.reduce(&+/2)
     end
     
