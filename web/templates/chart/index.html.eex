@@ -4,29 +4,33 @@
 </div>
 
 <script type="text/html" id="OptionTemplate">
-    <div class="row">
-        <h4>Positions</h4>
+    <div class="row strategy">
         <div class="col-md-2">
             <div class="input-group">
-                <input type="text" class="form-control" aria-label="Type" value="${type}" />
+                <select class="option-type-selector">
+                    <option>Select...</option>
+                    <option value="Call" {{if type == 'Call'}}selected='selected'{{/if}}>Call</option>
+                    <option value="Put" {{if type == 'Put'}}selected='selected'{{/if}}>Put</option>
+                    <option value="Stock" {{if type == 'Stock'}}selected='selected'{{/if}}>Stock</option>
+                </select>
             </div>
         </div>
         <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="text" class="form-control" aria-label="Strike" value="${strike}" />
+                <input type="text" class="form-control option-strike" aria-label="Strike" value="${strike}" />
             </div>
         </div>
         <div class="col-md-2">
             <div class="input-group">
                 <span class="input-group-addon">#</span>
-                <input type="text" class="form-control" aria-label="Quantity" value="${quantity}" />
+                <input type="text" class="form-control option-quantity" aria-label="Quantity" value="${quantity}" />
             </div>
         </div>
         <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="text" class="form-control" aria-label="Price" value="${price}" />
+                <input type="text" class="form-control option-price" aria-label="Price" value="${price}" />
             </div>
         </div>
     </div>
@@ -40,12 +44,14 @@
         var chartConfig = { 
         "options": [
             {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
-            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Call"} ],
+            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Put"} ],
         "settings": { "startPoint": xStart, "endPoint": xEnd }
         };
 
         var dataTmpl = $('#OptionTemplate').tmpl(chartConfig.options);
 		$('#positions').html(dataTmpl);
+
+        //$('select .option-type').selectpicker();
         
         $.post({
         url: '/api/chart/points',
@@ -69,7 +75,7 @@
                     
                 },
                 title: {
-                    text: 'Area chart with negative values'
+                    text: 'Strategy'
                 },
                 xAxis: {
                     title: {
@@ -98,7 +104,7 @@
                     enabled: false
                 },
                 series: [{
-                    name: 'Expiration',
+                    name: 'Strategy 1',
                     data: ydata
                 }],
                 plotOptions: {
@@ -126,8 +132,21 @@
                     }
                 }
             });
+
         }});
     });
+
+    function GetStrategyOptions(){
+        return $('#positions > .strategy')
+        .map(function(i, elm)
+        {
+            var type = $(elm).find('.option-type-selector').val();
+            var price = $(elm).find('.option-price').val();
+            var quantity =  $(elm).find('.option-quantity').val();
+            var strike = $(elm).find('.option-strike').val();
+            return { "type": type, "price": price, "quantity": quantity, "strike": strike };
+        });
+    }
 </script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
