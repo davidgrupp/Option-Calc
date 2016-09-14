@@ -13,7 +13,7 @@ config :logger, level: :warn
 config :option_calc, OptionCalc.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "123456",
+  password: "postgres",
   database: "option_calc_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
