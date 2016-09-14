@@ -1,40 +1,43 @@
-<div id="positions">
-</div>
-<div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
-</div>
-
-<script type="text/html" id="OptionTemplate">
-    <div class="row strategy">
-        <div class="col-md-2">
-            <div class="input-group">
-                <select class="option-type-selector">
-                    <option>Select...</option>
-                    <option value="Call" {{if type == 'Call'}}selected='selected'{{/if}}>Call</option>
-                    <option value="Put" {{if type == 'Put'}}selected='selected'{{/if}}>Put</option>
-                    <option value="Stock" {{if type == 'Stock'}}selected='selected'{{/if}}>Stock</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="input-group">
-                <span class="input-group-addon">$</span>
-                <input type="text" class="form-control option-strike" aria-label="Strike" value="${strike}" />
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="input-group">
-                <span class="input-group-addon">#</span>
-                <input type="text" class="form-control option-quantity" aria-label="Quantity" value="${quantity}" />
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="input-group">
-                <span class="input-group-addon">$</span>
-                <input type="text" class="form-control option-price" aria-label="Price" value="${price}" />
+<div class="container" ng-controller="StrategyController as strategy">
+    <div id="positions">
+        <div ng-repeat="position in positions">
+            <div class="row strategy">
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <select ng-model="position.type" class="option-type-selector">
+                            <option>Select...</option>
+                            <option value="Call">Call</option>
+                            <option value="Put">Put</option>
+                            <option value="Stock">Stock</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="text" class="form-control option-strike" aria-label="Strike" value="{{position.strike}}" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">#</span>
+                        <input type="text" class="form-control option-quantity" aria-label="Quantity" value="{{position.quantity}}" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="text" class="form-control option-price" aria-label="Price" value="{{position.price}}" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</script>
+    <div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
+    </div>
+</div>
+
+
 
 <script>
     $(function () {
@@ -48,8 +51,7 @@
         "settings": { "startPoint": xStart, "endPoint": xEnd }
         };
 
-        var dataTmpl = $('#OptionTemplate').tmpl(chartConfig.options);
-		$('#positions').html(dataTmpl);
+       SetupPositions(chartConfig.options);
 
         //$('select .option-type').selectpicker();
         
