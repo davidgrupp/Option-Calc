@@ -25,5 +25,5 @@
 	
 # Additional
 * May need to create migrations dir in priv/repo
-* For npm install may need to run as admin. alternatively npm install -g package.json@latest
+* For npm install may need to run as admin. alternatively `npm install -g package.json@latest`
 * May need to update passwords in config
