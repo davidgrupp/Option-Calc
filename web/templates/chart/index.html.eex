@@ -1,0 +1,154 @@
+<div id="positions">
+</div>
+<div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
+</div>
+
+<script type="text/html" id="OptionTemplate">
+    <div class="row strategy">
+        <div class="col-md-2">
+            <div class="input-group">
+                <select class="option-type-selector">
+                    <option>Select...</option>
+                    <option value="Call" {{if type == 'Call'}}selected='selected'{{/if}}>Call</option>
+                    <option value="Put" {{if type == 'Put'}}selected='selected'{{/if}}>Put</option>
+                    <option value="Stock" {{if type == 'Stock'}}selected='selected'{{/if}}>Stock</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="text" class="form-control option-strike" aria-label="Strike" value="${strike}" />
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="input-group">
+                <span class="input-group-addon">#</span>
+                <input type="text" class="form-control option-quantity" aria-label="Quantity" value="${quantity}" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="text" class="form-control option-price" aria-label="Price" value="${price}" />
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function () {
+        var xStart = 90;
+        var xEnd = 130;
+        
+        var chartConfig = { 
+        "options": [
+            {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
+            {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Put"} ],
+        "settings": { "startPoint": xStart, "endPoint": xEnd }
+        };
+
+        var dataTmpl = $('#OptionTemplate').tmpl(chartConfig.options);
+		$('#positions').html(dataTmpl);
+
+        //$('select .option-type').selectpicker();
+        
+        $.post({
+        url: '/api/chart/points',
+        data: JSON.stringify(chartConfig),
+        contentType: 'application/json',
+        success: function(data){
+            console.log(data);
+            var xdata = [];
+            var ydata = [];
+            for(var i = 0; i < data.chart.length; i++){
+                xdata.push(data.chart[i].x);
+                ydata.push([data.chart[i].x, data.chart[i].y]);
+            }
+
+            console.log(xdata);
+            console.log(ydata);
+
+            $('#chart').highcharts({
+                chart: {
+                    type: 'area',
+                    
+                },
+                title: {
+                    text: 'Strategy'
+                },
+                xAxis: {
+                    title: {
+                        enabled: false,
+                        text: "Price"
+                    },
+                    minPadding: 0,
+                    maxPadding: 0,
+                    startOnTick: true,
+                    endOnTick: true,
+                    showLastLabel: false
+                },
+                yAxis: {
+                    title: {
+                        text: "Gain / Loss"
+                    },
+                    minorGridLineWidth: "0px",
+                    plotLines: [{
+                        color: "rgb(90, 90, 90)",
+                        width: 2,
+                        value: 0,
+                        zIndex: 1
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Strategy 1',
+                    data: ydata
+                }],
+                plotOptions: {
+                    area: {
+                        animation: true,
+                        lineWidth: 3,
+                        allowPointSelect: false,
+                        color: "rgb(90, 180, 90)",
+                        negativeColor: "rgb(180, 90, 90)",
+                        marker: {
+                            radius: 0,
+                            states: {
+                                hover: { enabled: true, lineColor: "rgb(100,0,100)" }
+                            }
+                        },
+                        states: {
+                            hover: {
+                                marker: { enabled: true }
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: "<b>{series.name}<\/b><br>",
+                            pointFormat: "Price = {point.x}<br />Gain / Loss = {point.y}"
+                        }
+                    }
+                }
+            });
+
+        }});
+    });
+
+    function GetStrategyOptions(){
+        return $('#positions > .strategy')
+        .map(function(i, elm)
+        {
+            var type = $(elm).find('.option-type-selector').val();
+            var price = $(elm).find('.option-price').val();
+            var quantity =  $(elm).find('.option-quantity').val();
+            var strike = $(elm).find('.option-strike').val();
+            return { "type": type, "price": price, "quantity": quantity, "strike": strike };
+        });
+    }
+</script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/js/bootstrap-select.min.js"></script>
