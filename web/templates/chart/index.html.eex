@@ -1,6 +1,6 @@
 <div class="container" ng-controller="StrategyController as strategy">
     <div id="positions">
-        <div ng-repeat="position in positions">
+        <div ng-repeat="position in strategy.positions">
             <div class="row strategy">
                 <div class="col-md-2">
                     <div class="input-group">
