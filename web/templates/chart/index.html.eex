@@ -2,6 +2,9 @@
     <div id="positions">
         <div ng-repeat="position in strategy.positions">
             <div class="row strategy">
+                <div class="col-md-1">
+                    <button class="BtnRemove btn btn-primary position-{{$index}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <select ng-model="position.type" class="option-type-selector">
@@ -24,12 +27,26 @@
                         <input type="text" class="form-control option-quantity" aria-label="Quantity" value="{{position.quantity}}" />
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
                         <input type="text" class="form-control option-price" aria-label="Price" value="{{position.price}}" />
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row strategy-total">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-2">
+                condor
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-3">
+                ${{strategy.total.price}}
             </div>
         </div>
     </div>
@@ -51,7 +68,7 @@
         "settings": { "startPoint": xStart, "endPoint": xEnd }
         };
 
-       SetupPositions(chartConfig.options);
+        SetupPositions({ strategies: [ { positions: chartConfig.options } ] });
 
         //$('select .option-type').selectpicker();
         

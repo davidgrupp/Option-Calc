@@ -31,7 +31,9 @@ form.link, form.button {
   height: 71px;
   display: inline-block;
   margin-bottom: 1em;
-  background-image: url("/images/phoenix.png");
+  color: #333;
+  font-size: 48px;
+  font-weight: bold;
   background-size: 519px 71px;
 }
 
