@@ -18,19 +18,19 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control option-strike" ng-blur="strategy.updatePositions()" aria-label="Strike" ng-model="position.strike" />
+                        <input type="number" class="form-control option-strike" ng-blur="strategy.updatePositions()" aria-label="Strike" ng-model="position.strike" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        <input type="text" class="form-control option-quantity" ng-blur="strategy.updatePositions()" aria-label="Quantity" ng-model="position.quantity" />
+                        <input type="number" class="form-control option-quantity" ng-blur="strategy.updatePositions()" aria-label="Quantity" ng-model="position.quantity" />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control option-price" ng-blur="strategy.updatePositions()" aria-label="Price" ng-model="position.price" />
+                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.updatePositions()" aria-label="Price" ng-model="position.price" />
                     </div>
                 </div>
             </div>
