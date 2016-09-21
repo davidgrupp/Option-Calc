@@ -3,12 +3,12 @@
         <div ng-repeat="position in strategy.positions">
             <div class="row strategy">
                 <div class="col-md-1">
-                    <button class="BtnRemove btn btn-primary position-{{$index}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button class="BtnRemove btn btn-primary position-{{$index}}" ng-click="strategy.RemovePosition(position)"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
-                        <select ng-model="position.type" class="option-type-selector">
-                            <option>Select...</option>
+                        <select ng-model="position.type" ng-blur="strategy.updatePositions()" class="option-type-selector">
+                            <option value="">Select...</option>
                             <option value="Call">Call</option>
                             <option value="Put">Put</option>
                             <option value="Stock">Stock</option>
@@ -18,19 +18,19 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control option-strike" aria-label="Strike" value="{{position.strike}}" />
+                        <input type="text" class="form-control option-strike" ng-blur="strategy.updatePositions()" aria-label="Strike" ng-model="position.strike" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        <input type="text" class="form-control option-quantity" aria-label="Quantity" value="{{position.quantity}}" />
+                        <input type="text" class="form-control option-quantity" ng-blur="strategy.updatePositions()" aria-label="Quantity" ng-model="position.quantity" />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control option-price" aria-label="Price" value="{{position.price}}" />
+                        <input type="text" class="form-control option-price" ng-blur="strategy.updatePositions()" aria-label="Price" ng-model="position.price" />
                     </div>
                 </div>
             </div>
@@ -48,6 +48,9 @@
             <div class="col-md-3">
                 ${{strategy.total.price}}
             </div>
+        </div>
+        <div class="row">
+            <button ng-click="strategy.addPosition()">Add</button>
         </div>
     </div>
     <div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
@@ -68,104 +71,13 @@
         "settings": { "startPoint": xStart, "endPoint": xEnd }
         };
 
-        SetupPositions({ strategies: [ { positions: chartConfig.options } ] });
+        SetupPositions({ strategies: [ { positions: chartConfig.options } ], "settings": chartConfig.settings });
 
         //$('select .option-type').selectpicker();
-        
-        $.post({
-        url: '/api/chart/points',
-        data: JSON.stringify(chartConfig),
-        contentType: 'application/json',
-        success: function(data){
-            console.log(data);
-            var xdata = [];
-            var ydata = [];
-            for(var i = 0; i < data.chart.length; i++){
-                xdata.push(data.chart[i].x);
-                ydata.push([data.chart[i].x, data.chart[i].y]);
-            }
-
-            console.log(xdata);
-            console.log(ydata);
-
-            $('#chart').highcharts({
-                chart: {
-                    type: 'area',
-                    
-                },
-                title: {
-                    text: 'Strategy'
-                },
-                xAxis: {
-                    title: {
-                        enabled: false,
-                        text: "Price"
-                    },
-                    minPadding: 0,
-                    maxPadding: 0,
-                    startOnTick: true,
-                    endOnTick: true,
-                    showLastLabel: false
-                },
-                yAxis: {
-                    title: {
-                        text: "Gain / Loss"
-                    },
-                    minorGridLineWidth: "0px",
-                    plotLines: [{
-                        color: "rgb(90, 90, 90)",
-                        width: 2,
-                        value: 0,
-                        zIndex: 1
-                    }]
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Strategy 1',
-                    data: ydata
-                }],
-                plotOptions: {
-                    area: {
-                        animation: true,
-                        lineWidth: 3,
-                        allowPointSelect: false,
-                        color: "rgb(90, 180, 90)",
-                        negativeColor: "rgb(180, 90, 90)",
-                        marker: {
-                            radius: 0,
-                            states: {
-                                hover: { enabled: true, lineColor: "rgb(100,0,100)" }
-                            }
-                        },
-                        states: {
-                            hover: {
-                                marker: { enabled: true }
-                            }
-                        },
-                        tooltip: {
-                            headerFormat: "<b>{series.name}<\/b><br>",
-                            pointFormat: "Price = {point.x}<br />Gain / Loss = {point.y}"
-                        }
-                    }
-                }
-            });
-
-        }});
+        console.log("chartConfig: \r\n" + JSON.stringify( chartConfig ));
+        SetGraph(chartConfig);
     });
 
-    function GetStrategyOptions(){
-        return $('#positions > .strategy')
-        .map(function(i, elm)
-        {
-            var type = $(elm).find('.option-type-selector').val();
-            var price = $(elm).find('.option-price').val();
-            var quantity =  $(elm).find('.option-quantity').val();
-            var strike = $(elm).find('.option-strike').val();
-            return { "type": type, "price": price, "quantity": quantity, "strike": strike };
-        });
-    }
 </script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
