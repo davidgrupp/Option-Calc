@@ -15,7 +15,4 @@ defmodule OptionChartTest do
             %{x: 130, y: 13.176}] 
   end
 
-
-
-
 end
