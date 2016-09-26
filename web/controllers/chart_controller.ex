@@ -9,6 +9,7 @@ defmodule OptionCalc.ChartController do
     #IO.inspect(options)
     startPoint = settings["startPoint"]
     endPoint = settings["endPoint"]
+    optionsx100 = settings["optionsx100"]
     points = options 
         |> Enum.map(fn %{"strike" => strike, "price" => price, "type"=> type, "quantity"=> quantity} -> 
         %OptionCalc.Option{strike: strike, price: price, type: type, quantity: quantity} end)

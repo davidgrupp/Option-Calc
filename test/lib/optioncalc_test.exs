@@ -55,4 +55,27 @@ defmodule OptioncalcTest do
     assert OptionCalc.Calc.stock_value(120, 100, -2) == -40
 
   end
+
+
+  test "Calc total_price" do
+    positions = 
+      [%OptionCalc.Option{strike: 100, price: 12.8216, type: "Call", quantity: 1},
+      %OptionCalc.Option{strike: 120, price: 5.9976, type: "Call", quantity: -1}]
+
+    assert OptionCalc.Calc.total_price(positions) == 6.824
+
+  end
+
+  test "Calc total_cost" do
+    positions = 
+      [%OptionCalc.Option{strike: 100, price: 12.8216, type: "Call", quantity: 1},
+      %OptionCalc.Option{strike: 120, price: 5.9976, type: "Call", quantity: -1},
+      %OptionCalc.Option{           price: 110.0, type: "Stock", quantity: 1},]
+    #zero quantity
+    assert OptionCalc.Calc.total_cost(positions, false) == 116.824
+    assert OptionCalc.Calc.total_cost(positions, true) |> Float.round(1) == 792.4
+
+
+  end
+
 end

@@ -31,5 +31,23 @@ defmodule OptionCalc.Calc do
         -1 * option_value(value, strike, price, type, -1 * quantity)
     end
 
+    #value of stock position
     def stock_value(value, price, quantity), do: (value - price) * quantity
+
+    #total price of positions
+    def total_price(positions) do
+        positions
+        |> Enum.map(fn p -> if p.quantity > 0, do: p.price, else: -1 * p.price end)
+        |> Enum.reduce(&+/2)
+    end
+
+    #total cost of positions
+    def total_cost(positions, optionsx100) do
+        positions
+        |> Enum.map(fn 
+                %OptionCalc.Option{ type: "Stock" } =   p -> p.price * p.quantity
+                                                        p when optionsx100 -> 100 * p.price * p.quantity
+                                                        p -> p.price * p.quantity end)
+        |> Enum.reduce(&+/2)
+    end 
 end
