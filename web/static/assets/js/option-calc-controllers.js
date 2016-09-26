@@ -12,13 +12,17 @@ var SetupPositions = function(strategies) {
 			self.positions[i].id = i;
 		}
 
-		var totalPrice = self.positions
+		self.calcTotals = function(){
+			var totalPrice = self.positions
 				.map(p => p.quantity > 0 ? p.price : -1 * p.price )
-				.reduce((p, a ) => p + a)
-				.toFixed(2);
-
+				.reduce((p, a ) => p + a).toFixed(2);
+			var totalCost = self.positions
+				.map(p => p.price * p.quantity)
+				.reduce((p,a)=> p + a).toFixed(2);;
 		
-		self.total = { price: totalPrice };
+			self.total = { price: totalPrice, cost: totalCost };	
+		};
+		self.calcTotals();		
 
 		self.Action = 'Loading';
 
@@ -35,23 +39,35 @@ var SetupPositions = function(strategies) {
 			self.positions.splice(position.id, 1);
 		};
 
-		/*ReadStrategy($scope, $http, function () {
-			self.Action = 'List';
-
-			//read positions if this is a saved strategy
-		});*/
-
 		self.addPosition = function () {
-			alert("in add position");
-			self.positions.push({"strike": 100, "price": 0.0, "type": "", "quantity": 0});
+			self.positions.push({"strike": null, "price": 0.0, "type": "", "quantity": 0});
+		};
+
+		self.ValidateGraphData = function()
+		{
+			return self.positions.map(function(p) {
+				return { "strike": p.strike, "price": p.price, "type": p.type, "quantity": p.quantity }; 
+			})
+			.filter(function(p){
+				return p.strike > 0 
+					&& p.price >= 0
+					&& (p.type == "Call" || p.type == "Put" || p.type == "Stock")
+					&& (p.quantity > 0 || p.quantity < 0);
+			});
 		};
 
 		self.updatePositions = function(){
-			var options = self.positions.map(function(p) {
-				return { "strike": p.strike, "price": p.price, "type": p.type, "quantity": p.quantity }; 
-				});
+			self.calcTotals();
+			var positions = self.ValidateGraphData();
 			console.log("updatePositions settings: " + JSON.stringify(self.chartSettings));
-			SetGraph({ "settings": self.chartSettings, "options": options });
+			SetGraph({ "settings": self.chartSettings, "options": positions });
+		};
+
+		self.updatePositionEnter = function(){
+			console.log("updatePositionEnter");
+			return;
+			  if (keyEvent.which === 13)
+					self.updatePositions();
 		};
 
 		//$('#cmpInd').multiselect();

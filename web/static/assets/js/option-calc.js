@@ -1,4 +1,5 @@
 
+
 function SetGraph(chartConfig){
     console.log("setgraph: \r\n"+JSON.stringify(chartConfig));
      $.post({
@@ -16,7 +17,7 @@ function SetGraph(chartConfig){
 
             //console.log(xdata);
             //console.log(ydata);
-
+            return;
             $('#chart').highcharts({
                 chart: {
                     type: 'area',

@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
-                        <select ng-model="position.type" ng-blur="strategy.updatePositions()" class="option-type-selector">
+                        <select ng-model="position.type" ng-change="strategy.updatePositions()" class="option-type-selector">
                             <option value="">Select...</option>
                             <option value="Call">Call</option>
                             <option value="Put">Put</option>
@@ -18,19 +18,19 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" class="form-control option-strike" ng-blur="strategy.updatePositions()" aria-label="Strike" ng-model="position.strike" />
+                        <input type="number" class="form-control option-strike" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter()" aria-label="Strike" ng-model="position.strike" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        <input type="number" class="form-control option-quantity" ng-blur="strategy.updatePositions()" aria-label="Quantity" ng-model="position.quantity" />
+                        <input type="number" class="form-control option-quantity" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter()" aria-label="Quantity" ng-model="position.quantity" />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.updatePositions()" aria-label="Price" ng-model="position.price" />
+                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter()" aria-label="Price" ng-model="position.price" />
                     </div>
                 </div>
             </div>
@@ -44,6 +44,7 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-2">
+                ${{strategy.total.cost}}
             </div>
             <div class="col-md-3">
                 ${{strategy.total.price}}
@@ -78,7 +79,10 @@
         SetGraph(chartConfig);
     });
 
+    
+
 </script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.min.css">

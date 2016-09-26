@@ -37,7 +37,7 @@ config :phoenix, :stacktrace_depth, 20
 config :option_calc, OptionCalc.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "123456",
   database: "option_calc_dev",
   hostname: "localhost",
   pool_size: 10
