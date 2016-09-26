@@ -1,5 +1,12 @@
 <div class="container" ng-controller="StrategyController as strategy">
     <div id="positions">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="checkbox">
+                    <label><input type="checkbox" ng-model="strategy.Optionsx100" ng-change="strategy.updatePositions()">x100 Options</label>
+                </div>
+            </div>
+        </div>
         <div ng-repeat="position in strategy.positions">
             <div class="row strategy">
                 <div class="col-md-1">

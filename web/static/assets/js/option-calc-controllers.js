@@ -1,14 +1,11 @@
 
 var SetupPositions = function(strategies) {
 	angular.module("root",[]).controller("StrategyController", function ($scope, $http) {
-		console.log('in StrategyController');		
 		var self = this;
-		console.log("settings: " + JSON.stringify(strategies.settings));
+		self.Optionsx100 = false;
 		self.chartSettings = strategies.settings;
 		self.positions = strategies.strategies[0].positions;
 		for(var i = 0; i < self.positions.length; i++){
-			console.log(self.positions[i]);
-			//if(self.positions[i] != null)
 			self.positions[i].id = i;
 		}
 
@@ -17,7 +14,8 @@ var SetupPositions = function(strategies) {
 				.map(p => p.quantity > 0 ? p.price : -1 * p.price )
 				.reduce((p, a ) => p + a).toFixed(2);
 			var totalCost = self.positions
-				.map(p => p.price * p.quantity)
+				.map(p => p.price * (self.Optionsx100 && (p.type == "Call" || p.type == "Put")
+					? p.quantity * 100 : p.quantity))
 				.reduce((p,a)=> p + a).toFixed(2);;
 		
 			self.total = { price: totalPrice, cost: totalCost };	
@@ -46,7 +44,9 @@ var SetupPositions = function(strategies) {
 		self.ValidateGraphData = function()
 		{
 			return self.positions.map(function(p) {
-				return { "strike": p.strike, "price": p.price, "type": p.type, "quantity": p.quantity }; 
+				return { "strike": p.strike, "price": p.price, "type": p.type, 
+					"quantity": (self.Optionsx100 && (p.type == "Call" || p.type == "Put")
+					? p.quantity * 100 : p.quantity) }; 
 			})
 			.filter(function(p){
 				return p.strike > 0 
