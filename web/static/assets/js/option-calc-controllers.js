@@ -35,6 +35,7 @@ var SetupPositions = function(strategies) {
 		self.RemovePosition = function(position){
 			alert('remove' + JSON.stringify(position));
 			self.positions.splice(position.id, 1);
+			self.updatePositions();
 		};
 
 		self.addPosition = function () {
