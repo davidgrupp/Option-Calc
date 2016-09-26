@@ -57,7 +57,7 @@ function SetGraph(chartConfig){
                 }],
                 plotOptions: {
                     area: {
-                        animation: true,
+                        animation: false,
                         lineWidth: 3,
                         allowPointSelect: false,
                         color: "rgb(90, 180, 90)",

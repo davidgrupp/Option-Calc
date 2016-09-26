@@ -10,7 +10,7 @@
         <div ng-repeat="position in strategy.positions">
             <div class="row strategy">
                 <div class="col-md-1">
-                    <button class="BtnRemove btn btn-primary position-{{$index}}" ng-click="strategy.RemovePosition(position)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button class="BtnRemove btn btn-primary" ng-click="strategy.RemovePosition(position)"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">

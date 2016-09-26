@@ -50,7 +50,7 @@ var SetupPositions = function(strategies) {
 					? p.quantity * 100 : p.quantity) }; 
 			})
 			.filter(function(p){
-				return p.strike > 0 
+				return (p.strike > 0 && (p.type == "Call" || p.type == "Put"))
 					&& p.price >= 0
 					&& (p.type == "Call" || p.type == "Put" || p.type == "Stock")
 					&& (p.quantity > 0 || p.quantity < 0);
