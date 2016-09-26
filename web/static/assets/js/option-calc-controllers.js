@@ -63,11 +63,9 @@ var SetupPositions = function(strategies) {
 			SetGraph({ "settings": self.chartSettings, "options": positions });
 		};
 
-		self.updatePositionEnter = function(){
-			console.log("updatePositionEnter");
-			return;
-			  if (keyEvent.which === 13)
-					self.updatePositions();
+		self.updatePositionEnter = function(keyEvent){
+			if (keyEvent.which === 13)
+				self.updatePositions();
 		};
 
 		//$('#cmpInd').multiselect();
