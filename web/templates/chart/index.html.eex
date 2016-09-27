@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="checkbox">
-                    <label><input type="checkbox" ng-model="strategy.Optionsx100" ng-change="strategy.updatePositions()">x100 Options</label>
+                    <label><input type="checkbox" ng-model="strategy.settings.Optionsx100" ng-change="strategy.UpdatePositions()">x100 Options</label>
                 </div>
             </div>
         </div>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
-                        <select ng-model="position.type" ng-change="strategy.updatePositions()" class="option-type-selector">
+                        <select ng-model="position.type" ng-change="strategy.UpdatePositions()" class="option-type-selector">
                             <option value="">Select...</option>
                             <option value="Call">Call</option>
                             <option value="Put">Put</option>
@@ -25,19 +25,19 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" class="form-control option-strike" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter($event)" aria-label="Strike" ng-model="position.strike" />
+                        <input type="number" class="form-control option-strike" ng-blur="strategy.UpdatePositions()" ng-keypress="strategy.UpdatePositionEnter($event)" aria-label="Strike" ng-model="position.strike" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        <input type="number" class="form-control option-quantity" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter($event)" aria-label="Quantity" ng-model="position.quantity" />
+                        <input type="number" class="form-control option-quantity" ng-blur="strategy.UpdatePositions()" ng-keypress="strategy.UpdatePositionEnter($event)" aria-label="Quantity" ng-model="position.quantity" />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.updatePositions()" ng-keypress="strategy.updatePositionEnter($event)" aria-label="Price" ng-model="position.price" />
+                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.UpdatePositions()" ng-keypress="strategy.UpdatePositionEnter($event)" aria-label="Price" ng-model="position.price" />
                     </div>
                 </div>
             </div>
@@ -51,14 +51,14 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-2">
-                ${{strategy.total.cost}}
+                ${{strategy.totals.cost}}
             </div>
             <div class="col-md-3">
-                ${{strategy.total.price}}
+                ${{strategy.totals.price}}
             </div>
         </div>
         <div class="row">
-            <button ng-click="strategy.addPosition()">Add</button>
+            <button ng-click="strategy.AddPosition()">Add</button>
         </div>
     </div>
     <div id="chart" style="min-width: 410px; height: 500px; margin: 0 auto"></div>
@@ -73,13 +73,13 @@
         var xEnd = 130;
         
         var chartConfig = { 
-        "options": [
+        "positions": [
             {"strike": 100, "price": 12.8216, "type": "Call", "quantity": 1},
             {"price": 5.9976, "quantity": -1, "strike": 120, "type": "Put"} ],
-        "settings": { "startPoint": xStart, "endPoint": xEnd }
+        "settings": { "startPoint": xStart, "endPoint": xEnd, "Optionsx100": false }
         };
 
-        SetupPositions({ strategies: [ { positions: chartConfig.options } ], "settings": chartConfig.settings });
+        SetupPositions({ strategies: [ { positions: chartConfig.positions } ], "settings": chartConfig.settings });
 
         //$('select .option-type').selectpicker();
         console.log("chartConfig: \r\n" + JSON.stringify( chartConfig ));
