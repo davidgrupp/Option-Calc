@@ -3,7 +3,7 @@ defmodule OptionCalc.Calc do
     def strategy_profit(value, options) do
         options 
         |> Enum.map(fn 
-                %OptionCalc.Option{ type: "Stock"} =    o -> stock_value(value, o.price, o.quantity)
+                %OptionCalc.Option{ type: :stock } =    o -> stock_value(value, o.price, o.quantity)
                                                         o -> option_value(value, o.strike, o.price, o.type, o.quantity) end)
         |> Enum.reduce(&+/2)
     end
@@ -12,12 +12,12 @@ defmodule OptionCalc.Calc do
     def option_value(_, _, _, _, quantity) when quantity == 0, do: 0
     
     #call buy ITM
-    def option_value(value, strike, price, "Call", quantity) when quantity > 0 and value > strike do
+    def option_value(value, strike, price, :call, quantity) when quantity > 0 and value > strike do
         (value - strike - price) * quantity
     end
     
     #put buy ITM
-    def option_value(value, strike, price, "Put", quantity) when quantity > 0 and value < strike do
+    def option_value(value, strike, price, :put, quantity) when quantity > 0 and value < strike do
         (strike - value - price) * quantity
     end
     
@@ -45,7 +45,7 @@ defmodule OptionCalc.Calc do
     def total_cost(positions, optionsx100) do
         positions
         |> Enum.map(fn 
-                %OptionCalc.Option{ type: "Stock" } =   p -> p.price * p.quantity
+                %OptionCalc.Option{ type: :stock } =   p -> p.price * p.quantity
                                                         p when optionsx100 -> 100 * p.price * p.quantity
                                                         p -> p.price * p.quantity end)
         |> Enum.reduce(&+/2)

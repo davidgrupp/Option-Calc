@@ -11,8 +11,8 @@ defmodule OptionCalc.ChartController do
     endPoint = settings["endPoint"]
     optionsx100 = settings["optionsx100"]
     points = options 
-        |> Enum.map(fn %{"strike" => strike, "price" => price, "type"=> type, "quantity"=> quantity} -> 
-        %OptionCalc.Option{strike: strike, price: price, type: type, quantity: quantity} end)
+        |> Enum.map(fn %{"strike" => strike, "price" => price, "type"=> type, "quantity"=> quantity} when type in ["Call", "Put", "Stock"] -> 
+        %OptionCalc.Option{strike: strike, price: price, type: String.to_atom(type |> String.downcase), quantity: quantity} end)
         |> OptionCalc.Chart.points(startPoint, endPoint, 20)
     
     json conn, %{ chart: points }
