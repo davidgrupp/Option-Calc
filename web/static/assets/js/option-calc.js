@@ -1,7 +1,7 @@
-var StrategyManager = function(strategies){
+var StrategyManager = function(strategies, $http){
 	var self = this;
+    self.$http = $http;
 
-	//self.Optionsx100 = false;
 	self.settings = strategies.settings;
 	self.positions = strategies.strategies[0].positions;
 	for(var i = 0; i < self.positions.length; i++){
@@ -34,9 +34,8 @@ var StrategyManager = function(strategies){
 	};
 
 	self.UpdatePositions = function(){
-		//self.calcTotals();
 		var positions = self.ValidateGraphData();
-        SetGraph(self.settings, positions, self.UpdateData);
+        self.SetGraph(self.settings, positions, self.UpdateData);
 	};
 
 	self.UpdatePositionEnter = function(keyEvent){
@@ -52,47 +51,42 @@ var StrategyManager = function(strategies){
         self.totals = data.totals;
     };
 
-    self.bind = function(){
-        angular.module("root",[]).controller("StrategyController", function ($scope) {
-            var cntr = this;
-            cntr.RemovePosition = self.RemovePosition;
-            cntr.AddPosition = self.AddPosition;
-            cntr.ValidateGraphData =self.ValidateGraphData;
-            cntr.UpdatePositions = self.UpdatePositions;
-            cntr.UpdatePositionEnter = self.UpdatePositionEnter;
-            cntr.positions = self.positions;
-            cntr.settings = self.settings;
-            cntr.totals = self.totals;
-        });
-    };
+    self.SetGraph = function (settings, positions, updateDataCallback){
+        var chartConfig = { "settings": settings, "positions": positions };
+        console.log("setgraph: \r\n"+JSON.stringify(chartConfig));
+        self.$http({
+            url: '/api/chart/points',
+            method: "POST",
+            data: chartConfig
+        })
+        .then(function(response) {
+                console.log('api response');
+                console.log(response);
+                var xdata = [];
+                var ydata = [];
+                for(var i = 0; i < response.data.chart.length; i++){
+                    xdata.push(response.data.chart[i].x);
+                    ydata.push([response.data.chart[i].x, response.data.chart[i].y]);
+                }
 
+                updateDataCallback(response.data);
+
+                var chart = new StrategyChart(ydata);
+        }, 
+        function(response) {
+                console.log('api call failed');
+                console.log(response);
+        });
+    }
 
 };
 
-function SetGraph(settings, positions, updateDataCallback){
-    var chartConfig = { "settings": settings, "positions": positions };
-    console.log("setgraph: \r\n"+JSON.stringify(chartConfig));
-     $.post({
-        url: '/api/chart/points',
-        data: JSON.stringify(chartConfig),
-        contentType: 'application/json',
-        success: function(data){
-            console.log(data);
-            var xdata = [];
-            var ydata = [];
-            for(var i = 0; i < data.chart.length; i++){
-                xdata.push(data.chart[i].x);
-                ydata.push([data.chart[i].x, data.chart[i].y]);
-            }
 
-            updateDataCallback(data);
-
-            //console.log(xdata);
-            //console.log(ydata);
-            $('#chart').highcharts({
+var StrategyChart = function(ydata){
+    self = this;
+    self.chart = $('#chart').highcharts({
                 chart: {
                     type: 'area',
-                    
                 },
                 title: {
                     text: 'Strategy'
@@ -152,6 +146,4 @@ function SetGraph(settings, positions, updateDataCallback){
                     }
                 }
             });
-
-        }});
-}
+};

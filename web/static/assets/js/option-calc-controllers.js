@@ -1,24 +1,24 @@
 
 var SetupPositions = function(strategies) {
-	var strategyManager = new StrategyManager(strategies);
-	strategyManager.bind();
-	strategyManager.UpdatePositions();
-	/*angular.module("root",[]).controller("StrategyController", function ($scope, $http) {
-		var self = this;
-		//functions
-		self.RemovePosition = strategyManager.RemovePosition;
-		self.AddPosition = strategyManager.AddPosition;
-		self.ValidateGraphData = strategyManager.ValidateGraphData;
-		self.UpdatePositions = strategyManager.UpdatePositions;
-		self.UpdatePositionEnter = strategyManager.UpdatePositionEnter;
-		//properties
-		self.positions = strategyManager.positions;
-		self.settings = strategyManager.settings;
-		self.totals = strategyManager.totals;
-		strategyManager.UpdatePositions();
-	});*/
 	
-	return strategyManager;
+
+	angular.module("root",[]).controller("StrategyController", function ($scope, $http) {
+		var self = this;
+		self.sm = new StrategyManager(strategies, $http);
+		//functions
+		self.RemovePosition = self.sm.RemovePosition;
+		self.AddPosition = self.sm.AddPosition;
+		self.ValidateGraphData = self.sm.ValidateGraphData;
+		self.UpdatePositions = self.sm.UpdatePositions;
+		self.UpdatePositionEnter = self.sm.UpdatePositionEnter;
+		//properties
+		self.positions = self.sm.positions;
+		self.settings = self.sm.settings;
+		self.totals = self.sm.totals;
+		self.sm.UpdatePositions();
+	});
+	
+	//return strategyManager;
 };
 
 
