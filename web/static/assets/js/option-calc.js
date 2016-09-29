@@ -34,18 +34,43 @@ var StrategyManager = function(strategies){
 	};
 
 	self.UpdatePositions = function(){
-		self.calcTotals();
+		//self.calcTotals();
 		var positions = self.ValidateGraphData();
-		SetGraph({ "settings": self.chartSettings, "options": positions });
+        SetGraph(self.settings, positions, self.UpdateData);
 	};
 
 	self.UpdatePositionEnter = function(keyEvent){
 		if (keyEvent.which === 13)
-			self.updatePositions();
+			self.UpdatePositions();
 	};
+
+    self.UpdateData = function(data){
+        console.log("update data");
+        console.log(data);
+        self.settings = data.settings;
+        self.positions = data.positions;
+        self.totals = data.totals;
+    };
+
+    self.bind = function(){
+        angular.module("root",[]).controller("StrategyController", function ($scope) {
+            var cntr = this;
+            cntr.RemovePosition = self.RemovePosition;
+            cntr.AddPosition = self.AddPosition;
+            cntr.ValidateGraphData =self.ValidateGraphData;
+            cntr.UpdatePositions = self.UpdatePositions;
+            cntr.UpdatePositionEnter = self.UpdatePositionEnter;
+            cntr.positions = self.positions;
+            cntr.settings = self.settings;
+            cntr.totals = self.totals;
+        });
+    };
+
+
 };
 
-function SetGraph(chartConfig){
+function SetGraph(settings, positions, updateDataCallback){
+    var chartConfig = { "settings": settings, "positions": positions };
     console.log("setgraph: \r\n"+JSON.stringify(chartConfig));
      $.post({
         url: '/api/chart/points',
@@ -59,6 +84,8 @@ function SetGraph(chartConfig){
                 xdata.push(data.chart[i].x);
                 ydata.push([data.chart[i].x, data.chart[i].y]);
             }
+
+            updateDataCallback(data);
 
             //console.log(xdata);
             //console.log(ydata);

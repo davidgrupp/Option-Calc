@@ -82,8 +82,8 @@
         SetupPositions({ strategies: [ { positions: chartConfig.positions } ], "settings": chartConfig.settings });
 
         //$('select .option-type').selectpicker();
-        console.log("chartConfig: \r\n" + JSON.stringify( chartConfig ));
-        SetGraph(chartConfig);
+        //console.log("chartConfig: \r\n" + JSON.stringify( chartConfig ));
+        //SetGraph(chartConfig);
     });
 
     
