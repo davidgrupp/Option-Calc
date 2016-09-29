@@ -49,24 +49,17 @@ var StrategyManager = function(strategies, $http){
 
     self.SetGraph = function (settings, positions, updateDataCallback){
         var chartConfig = { "settings": settings, "positions": positions };
-        console.log("setgraph: \r\n"+JSON.stringify(chartConfig));
         self.$http({
             url: '/api/chart/points',
             method: "POST",
             data: chartConfig
         })
         .then(function(response) {
-                console.log('api response');
-                console.log(response);
-                var xdata = [];
                 var ydata = [];
                 for(var i = 0; i < response.data.chart.length; i++){
-                    xdata.push(response.data.chart[i].x);
                     ydata.push([response.data.chart[i].x, response.data.chart[i].y]);
                 }
-
                 updateDataCallback(response.data);
-
                 var chart = new StrategyChart(ydata);
         }, 
         function(response) {
