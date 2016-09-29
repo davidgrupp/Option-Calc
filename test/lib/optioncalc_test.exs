@@ -73,7 +73,7 @@ defmodule OptioncalcTest do
       %OptionCalc.Option{           price: 110.0, type: :stock, quantity: 1},]
     #zero quantity
     assert OptionCalc.Calc.total_cost(positions, false) == 116.824
-    assert OptionCalc.Calc.total_cost(positions, true) |> Float.round(1) == 792.4
+    assert OptionCalc.Calc.total_cost(positions, true) == 792.4
 
 
   end

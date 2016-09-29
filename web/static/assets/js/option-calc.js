@@ -26,7 +26,7 @@ var StrategyManager = function(strategies, $http){
 				? p.quantity * 100 : p.quantity) }; 
 		})
 		.filter(function(p){
-			return (p.strike > 0 && (p.type == "Call" || p.type == "Put"))
+			return (p.strike > 0 || (p.type != "Call" && p.type != "Put"))
 				&& p.price >= 0
 				&& (p.type == "Call" || p.type == "Put" || p.type == "Stock")
 				&& (p.quantity > 0 || p.quantity < 0);
@@ -44,10 +44,6 @@ var StrategyManager = function(strategies, $http){
 	};
 
     self.UpdateData = function(data){
-        console.log("update data");
-        console.log(data);
-        self.settings = data.settings;
-        self.positions = data.positions;
         self.totals = data.totals;
     };
 

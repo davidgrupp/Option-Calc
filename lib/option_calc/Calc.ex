@@ -39,6 +39,7 @@ defmodule OptionCalc.Calc do
         positions
         |> Enum.map(fn p -> if p.quantity > 0, do: p.price, else: -1 * p.price end)
         |> Enum.reduce(&+/2)
+        |> Float.round(3)
     end
 
     #total cost of positions
@@ -49,5 +50,6 @@ defmodule OptionCalc.Calc do
                                                         p when optionsx100 -> 100 * p.price * p.quantity
                                                         p -> p.price * p.quantity end)
         |> Enum.reduce(&+/2)
+        |> Float.round(3)
     end 
 end
