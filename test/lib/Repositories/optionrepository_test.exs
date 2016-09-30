@@ -5,9 +5,8 @@ defmodule OptionRepositoryTest do
   test "Option Repository read" do
 
     results = OptionCalc.Repositories.OptionRepository.read_expirations("aapl")
-    IO.inspect results
-    %{ "query" => %{ "results" => %{ "quote" => quote } } } = results
-    assert Enum.count(quote) == 2
+    %{ "response" => %{ "expirationdates" => %{ "date" => dates } } } = results
+    assert Enum.count(dates) > 3
   end
 
 end
