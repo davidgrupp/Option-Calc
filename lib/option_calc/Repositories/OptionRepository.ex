@@ -3,7 +3,7 @@ defmodule OptionCalc.Repositories.OptionRepository do
   
   def read_expirations(symbol) do
 		url = tk <> "market/options/expirations.json?symbol=#{symbol}"
-    signed_oauth_headers = OptionCalc.OAuth.sign("post", url, [], :tk_oauth)
+    signed_oauth_headers = OptionCalc.OAuth.sign(:get, url, :tk_oauth)
 		%{ body: content, status_code: 200 } = HTTPoison.get!(URI.encode(url), signed_oauth_headers)
     content
     |> Poison.decode!

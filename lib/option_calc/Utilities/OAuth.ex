@@ -14,6 +14,10 @@ defmodule OptionCalc.OAuth do
     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     """
+    def sign(verb, url, config_key) when is_atom(config_key) do
+        sign(verb, url, [], config_key)
+    end 
+
   def sign(verb, url, params, config_key) when is_atom(config_key) do
     args = Application.get_env(:option_calc, config_key)
     sign(verb, url, params, args)
@@ -64,6 +68,9 @@ defmodule OptionCalc.OAuth do
     |> Stream.map(&normalize/1)
     |> Enum.map_join("&", &percent_encode/1)
   end
+
+  defp normalize(verb) when is_atom(verb),
+    do: normalize(Atom.to_string(verb))
 
   defp normalize(verb) when is_binary(verb),
     do: String.upcase(verb)
