@@ -2,14 +2,12 @@ defmodule QuoteRepositoryTest do
   use ExUnit.Case
   #doctest OptionCalc.Calc
 
-  test "Quote read" do
+  test "Quote Repository read" do
 
-    result = OptionCalc.Repositories.QuoteRepository.read(["aapl","TSLA"])
+    results = OptionCalc.Repositories.QuoteRepository.read(["aapl","TSLA"])
     
-     IO.puts result
-    
-    assert false
-    #assert String.length(content) > 0
+    %{ "query" => %{ "results" => %{ "quote" => quote } } } = results
+    assert Enum.count(quote) == 2
   end
 
 end

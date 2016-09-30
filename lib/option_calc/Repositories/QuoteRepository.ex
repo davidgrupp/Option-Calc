@@ -1,4 +1,3 @@
-
 defmodule OptionCalc.Repositories.QuoteRepository do
   import OptionCalc.Constants.ApiBaseUrls
   
@@ -16,7 +15,7 @@ defmodule OptionCalc.Repositories.QuoteRepository do
 	
 		%{ body: content, status_code: 200 } = HTTPoison.get!(URI.encode(url))
     content
-    |> Posion.decode!
+    |> Poison.decode!
   end
   
   
