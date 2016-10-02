@@ -3,16 +3,13 @@ defmodule OptionRepositoryTest do
   #doctest OptionCalc.Calc
 
   test "Option Repository read expirations" do
-
     results = OptionCalc.Repositories.OptionRepository.read_expirations("aapl")
-    %{ "response" => %{ "expirationdates" => %{ "date" => dates } } } = results
-    assert Enum.count(dates) > 3
+    assert Enum.count(results) > 3
   end
 
-  test "Option Repository read strikes" do
+  test "Option Repository read strike pricess" do
 
-    results = OptionCalc.Repositories.OptionRepository.read_strikes("aapl")
-    %{ "response" => %{ "prices" => %{ "price" => prices } } } = results
-    assert Enum.count(prices) > 3
+    results = OptionCalc.Repositories.OptionRepository.read_strike_prices("aapl", ~D[2010-10-07])
+    assert Enum.count(results) > 3
   end
 end

@@ -4,8 +4,8 @@ defmodule OptioncalcTest do
 
   test "Calc strategy_profit" do
     options = 
-      [%OptionCalc.Option{strike: 100, price: 12.8216, type: :call, quantity: 1},
-      %OptionCalc.Option{strike: 120, price: 5.9976, type: :call, quantity: -1}]
+      [%OptionCalc.Position{strike: 100, price: 12.8216, type: :call, quantity: 1},
+      %OptionCalc.Position{strike: 120, price: 5.9976, type: :call, quantity: -1}]
     
     assert OptionCalc.Calc.strategy_profit(0, options) == -6.824
     assert OptionCalc.Calc.strategy_profit(100, options) == -6.824
@@ -59,8 +59,8 @@ defmodule OptioncalcTest do
 
   test "Calc total_price" do
     positions = 
-      [%OptionCalc.Option{strike: 100, price: 12.8216, type: :call, quantity: 1},
-      %OptionCalc.Option{strike: 120, price: 5.9976, type: :call, quantity: -1}]
+      [%OptionCalc.Position{strike: 100, price: 12.8216, type: :call, quantity: 1},
+      %OptionCalc.Position{strike: 120, price: 5.9976, type: :call, quantity: -1}]
 
     assert OptionCalc.Calc.total_price(positions) == 6.824
 
@@ -68,9 +68,9 @@ defmodule OptioncalcTest do
 
   test "Calc total_cost" do
     positions = 
-      [%OptionCalc.Option{strike: 100, price: 12.8216, type: :call, quantity: 1},
-      %OptionCalc.Option{strike: 120, price: 5.9976, type: :call, quantity: -1},
-      %OptionCalc.Option{           price: 110.0, type: :stock, quantity: 1},]
+      [%OptionCalc.Position{strike: 100, price: 12.8216, type: :call, quantity: 1},
+      %OptionCalc.Position{strike: 120, price: 5.9976, type: :call, quantity: -1},
+      %OptionCalc.Position{           price: 110.0, type: :stock, quantity: 1},]
     #zero quantity
     assert OptionCalc.Calc.total_cost(positions, false) == 116.824
     assert OptionCalc.Calc.total_cost(positions, true) == 792.4

@@ -12,7 +12,7 @@ defmodule OptionCalc.ChartController do
     optionsx100 = settings["Optionsx100"]
     pos = positions 
         |> Enum.map(fn %{"strike" => strike, "price" => price, "type"=> type, "quantity"=> quantity} when type in ["Call", "Put", "Stock"] -> 
-        %OptionCalc.Option{strike: strike, price: price, type: String.to_atom(type |> String.downcase), quantity: quantity} end)
+        %OptionCalc.Position{strike: strike, price: price, type: String.to_atom(type |> String.downcase), quantity: quantity} end)
     points = pos
         |> OptionCalc.Chart.points(startPoint, endPoint, 20)
     totals = %{ cost: pos |> OptionCalc.Calc.total_cost(optionsx100),
