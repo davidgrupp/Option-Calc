@@ -9,5 +9,11 @@ defmodule OptionCalc.Repositories.OptionRepository do
     |> Poison.decode!
   end
   
-  
+  def read_strikes(symbol) do
+    url = tk <> "market/options/strikes.json?symbol=#{symbol}"
+    signed_oauth_headers = OptionCalc.OAuth.sign(:get, url, :tk_oauth)
+		%{ body: content, status_code: 200 } = HTTPoison.get!(URI.encode(url), signed_oauth_headers)
+    content
+    |> Poison.decode!
+  end
 end
