@@ -18,4 +18,4 @@ config :option_calc, OptionCalc.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-config :option_repo, :option_repo, OptionCalc.Tests.Repositories.OptionRepositoryMock
+config :option_calc, :option_repo, OptionCalc.Mocks.Repositories.OptionRepositoryMock
