@@ -1,46 +1,39 @@
 defmodule OptionCalc.Services.OptionDataCache do
-  use GenServer
   
   @option_repo Application.get_env(:option_calc, :option_repo)
-
-  def get_expirations(pid, symbol), do: GenServer.call(pid,{:get_expirations, symbol})
-  def set_expirations(pid, symbol), do: GenServer.cast(pid,{:set_expirations, symbol})
 	
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{ expirations: %{}, strikes: %{} })
+  def start_link do
+	  Agent.start_link(fn-> %{ expirations: %{}, strikes: %{} } end)
   end
-	
-  def handle_call({:get_expirations, symbol}, _from, %{ expirations: expirations} = state) do
-    if Map.has_key?(expirations, symbol) && expirations[symbol].date > 10minutes do
 
-    else
-
-    end
-    exp_tsk = @option_repo.read_expirations(symbol)
-    tsk = Task.async(fn ->
-      exp = exp_tsk |> Task.await
-      push_expiration(%{symbol: symbol, expirations: exp})
-      exp
+  def get_expirations(pid, symbol) do
+    Agent.get_and_update(pid, fn %{ expirations: cache } = state -> 
+      if cached = cache[symbol] do
+        { cached, cache }
+      else
+        result = @option_repo.read_expirations(symbol) |> Task.await
+        { result, Map.put(state, :expirations, Map.put(cache, symbol, result)) }
+      end
     end)
-    {:reply, tsk, { } }
   end
-  
-  def handle_call({:get_expirations, symbol}, _from, %{ expirations: expirations} = state) do
-    exp_tsk = @option_repo.read_expirations(symbol)
-    tsk = Task.async(fn ->
-      exp = exp_tsk |> Task.await
-      push_expiration(%{symbol: symbol, expirations: exp})
-      exp
+
+  def get_expirations_async(pid, symbol) do
+    Agent.get_and_update(pid, fn %{ expirations: cache } = state -> 
+      if cached = cache[symbol] do
+        { Task.async(fn -> cached end), state }
+      else
+        tsk = Task.async(fn ->
+          exp = @option_repo.read_expirations(symbol) |> Task.await
+          set_expirations(pid, symbol, exp)
+          exp
+        end)
+        { tsk, state }
+      end
     end)
-    { :reply, tsk, state }
   end
 
-
-
-  def handle_cast({:set_expirations, symbol}, { state, rlist }) do
-    #{:noreply, { [item|state], rlist++[item] } }
+  def set_expirations(pid, symbol, value) do
+    Agent.update(pid, fn %{ expirations: exp } = state -> Map.put(state, :expirations, Map.put(exp, symbol, value)) end)
   end
-
-
 
 end
