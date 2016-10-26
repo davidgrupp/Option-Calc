@@ -22,4 +22,16 @@ defmodule OptionDataCacheTests do
     assert results2 == results3
   end
 
+  test "is_valid is valid" do
+    valid = %{ cached_on: DateTime.utc_now }
+    result = OptionCalc.Services.OptionDataCache.is_valid(valid)
+    assert result == true
+  end
+
+  test "is_valid is invalid" do
+    invalid = %{ cached_on: DateTime.from_unix!(1) }
+    result = OptionCalc.Services.OptionDataCache.is_valid(invalid)
+    assert result == false
+  end
+
 end
