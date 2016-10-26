@@ -33,7 +33,27 @@ defmodule OptionCalc.Services.OptionDataCache do
     end
   end
 
+  def get_strikes_prices_async(pid, symbol, date) do
+    cache = Agent.get(pid, fn %{ strikes: str_cache } -> str_cache end)
+    cached = cache[symbol][date]
+
+    if cached != nil && is_valid(cached) do
+      Task.async(fn -> cached.value end)
+    else
+      Task.async(fn ->
+        exp = @option_repo.read_expirations(symbol) |> Task.await
+        set_expirations(pid, symbol, exp)
+        exp
+      end)
+    end
+  end
+
   def set_expirations(pid, symbol, value) do
+    cached_value = %{ value: value, cached_on: DateTime.utc_now, status: :ready }
+    Agent.update(pid, fn %{ expirations: exp } = state -> Map.put(state, :expirations, Map.put(exp, symbol, cached_value )) end)
+  end
+
+  def set_strikes_prices(pid, symbol, date, value) do
     cached_value = %{ value: value, cached_on: DateTime.utc_now, status: :ready }
     Agent.update(pid, fn %{ expirations: exp } = state -> Map.put(state, :expirations, Map.put(exp, symbol, cached_value )) end)
   end
