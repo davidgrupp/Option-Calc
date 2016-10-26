@@ -18,18 +18,17 @@ defmodule OptionCalc.Services.OptionDataCache do
   end
 
   def get_expirations_async(pid, symbol) do
-    Agent.get_and_update(pid, fn %{ expirations: cache } = state -> 
-      if cached = cache[symbol] do
-        { Task.async(fn -> cached end), state }
-      else
-        tsk = Task.async(fn ->
-          exp = @option_repo.read_expirations(symbol) |> Task.await
-          set_expirations(pid, symbol, exp)
-          exp
-        end)
-        { tsk, state }
-      end
-    end)
+    cache = Agent.get(pid, &(&1))
+    
+    if cached = cache[symbol] do
+      Task.async(fn -> cached end)
+    else
+      Task.async(fn ->
+        exp = @option_repo.read_expirations(symbol) |> Task.await
+        set_expirations(pid, symbol, exp)
+        exp
+      end)
+    end
   end
 
   def set_expirations(pid, symbol, value) do
