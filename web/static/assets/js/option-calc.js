@@ -70,6 +70,28 @@ var StrategyManager = function(strategies, $http){
 
 };
 
+var QuoteManager = function(quote, $http){
+	var self = this;
+    self.$http = $http;
+
+    self.symbol = quote != null ? quote.symbol : null;
+    self.expiration = quote != null ? quote.expiration : [];
+    self.expirations = quote != null ? quote.expirations : [];
+    self.strikePrices = quote != null ? quote.strikePrices : [];
+
+    self.GetQuoteKeyPress = function(){
+
+    };
+
+    self.GetQuote = function(){
+
+    };
+
+    self.GetStrikes = function(){
+
+    };
+};
+
 
 var StrategyChart = function(ydata){
     self = this;

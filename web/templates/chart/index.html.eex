@@ -1,6 +1,21 @@
 <div class="container" ng-controller="StrategyController as strategy">
     <div id="positions">
         <div class="row">
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input type="text" placeholder="Symbol..." class="form-control symbol" ng-keypress="strategy.qm.GetQuoteKeyPress($event)" aria-label="Strike" ng-model="strategy.qm.symbol" />
+                    <span class="input-group-btn">
+                        <button class="BtnQuote btn btn-primary" ng-click="strategy.qm.GetQuote(strategy.qm.symbol)"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <select ng-model="strategy.qm.expiration" ng-change="strategy.qm.GetStrikes(strategy.qm.expiration)" class="expiration-selector">
+                    <option value="">Select...</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="checkbox">
                     <label><input type="checkbox" ng-model="strategy.sm.settings.Optionsx100" ng-change="strategy.sm.UpdatePositions()">x100 Options</label>
@@ -25,19 +40,19 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" class="form-control option-strike" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Strike" ng-model="position.strike" />
+                        <input type="number" class="form-control option-strike" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Strike" placeholder="Strike..." ng-model="position.strike" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        <input type="number" class="form-control option-quantity" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Quantity" ng-model="position.quantity" />
+                        <input type="number" class="form-control option-quantity" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Quantity" placeholder="Quantity..." ng-model="position.quantity" />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Price" ng-model="position.price" />
+                        <input type="number" step="any" class="form-control option-price" ng-blur="strategy.sm.UpdatePositions()" ng-keypress="strategy.sm.UpdatePositionEnter($event)" aria-label="Price" placeholder="Price..." ng-model="position.price" />
                     </div>
                 </div>
             </div>
