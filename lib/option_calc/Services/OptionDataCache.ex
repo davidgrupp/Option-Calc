@@ -31,7 +31,7 @@ defmodule OptionCalc.Services.OptionDataCache do
       Task.async(fn -> cached.value end)
     else
       Task.async(fn ->
-        result = query.(key)
+        result = Agent.get_and_update(pid, fn x -> { query.(key), x } end) #blocks other request to agent pid so other processes don't call the query function
         set_value(pid, section, key, result)
         result
       end)
