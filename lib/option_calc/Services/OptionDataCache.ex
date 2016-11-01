@@ -23,6 +23,14 @@ defmodule OptionCalc.Services.OptionDataCache do
     get_value_async(pid, :strikes, {symbol, date}, fn {symbol, date} -> @option_repo.read_strike_prices(symbol, date) |> Task.await end)
   end
 
+  def set_expirations(pid, symbol, value) do
+    set_value(pid, :expirations, symbol, value)
+  end
+
+  def set_strike_prices(pid, symbol, date, value) do
+    set_value(pid, :strikes, {symbol, date}, value)
+  end
+
   def get_value_async(pid, section, key, query) do
     cache = Agent.get(pid, fn x -> x[section] end)
     cached = cache[key]

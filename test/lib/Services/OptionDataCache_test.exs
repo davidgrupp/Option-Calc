@@ -62,4 +62,20 @@ defmodule OptionDataCacheTests do
     assert true
   end
 
+  test "OptionDataCache set_expirations" do
+    { :ok, pid } = OptionCalc.Services.OptionDataCache.start_link
+    OptionCalc.Services.OptionDataCache.set_expirations(pid, "AAPL", 123)
+    OptionCalc.Services.OptionDataCache.set_expirations(pid, "AAPL", 234)
+    results = OptionCalc.Services.OptionDataCache.get_expirations(pid, "AAPL")
+    assert results == 234
+  end
+
+  test "OptionDataCache set_strike_prices" do
+    { :ok, pid } = OptionCalc.Services.OptionDataCache.start_link
+    OptionCalc.Services.OptionDataCache.set_strike_prices(pid, "AAPL", ~D"2016-10-14", 123)
+    OptionCalc.Services.OptionDataCache.set_strike_prices(pid, "AAPL", ~D"2016-10-14", 234)
+    results = OptionCalc.Services.OptionDataCache.get_strike_prices(pid, "AAPL", ~D"2016-10-14")
+    assert results == 234
+  end
+
 end
