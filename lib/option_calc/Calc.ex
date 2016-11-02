@@ -47,8 +47,8 @@ defmodule OptionCalc.Calc do
         positions
         |> Enum.map(fn 
                 %OptionCalc.Position{ type: :stock } =   p -> p.price * p.quantity
-                                                        p when optionsx100 -> 100 * p.price * p.quantity
-                                                        p -> p.price * p.quantity end)
+                                                         p when optionsx100 -> 100 * p.price * p.quantity
+                                                         p -> p.price * p.quantity end)
         |> Enum.reduce(&+/2)
         |> Float.round(3)
     end 

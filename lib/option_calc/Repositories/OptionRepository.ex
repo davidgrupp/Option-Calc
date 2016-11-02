@@ -21,7 +21,7 @@ defmodule OptionCalc.Repositories.OptionRepository do
       %{ body: content, status_code: 200 } = HTTPoison.get!(URI.encode(url), signed_oauth_headers)
       %{ "response" => %{ "quotes" => %{ "quote" => quotes } } } = content |> Poison.decode!
       quotes
-      |> Enum.map(fn q ->  %OptionCalc.Option{ ask: q["ask"], bid: q["bid"], close: q["close"], open: q["open"], last: q["last"], type: q["type"], strike: q["strike"] } end )
+      |> Enum.map(fn q -> %OptionCalc.Option{ ask: q["ask"], bid: q["bid"], close: q["close"], open: q["open"], last: q["last"], type: q["type"], strike: q["strike"] } end )
     end)
   end
 end

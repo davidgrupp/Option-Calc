@@ -5,9 +5,7 @@ defmodule QuoteRepositoryTest do
   test "Quote Repository read" do
 
     results = OptionCalc.Repositories.QuoteRepository.read(["aapl","TSLA"]) |> Task.await
-    
-    %{ "query" => %{ "results" => %{ "quote" => quote } } } = results
-    assert Enum.count(quote) == 2
+    assert Enum.count(results) == 2
   end
 
 end

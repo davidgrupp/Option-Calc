@@ -5,7 +5,7 @@ defmodule OAuthTests do
   test "OAuth sign" do
     #assert on patern match 
     [{"Authorization", "OAuth oauth_signature=" <> _}] = OptionCalc.OAuth.sign(:get, "https://example.com", :tk_oauth)
-    assert true
+    assert 1==1
   end
 
 end
