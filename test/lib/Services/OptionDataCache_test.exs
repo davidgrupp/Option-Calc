@@ -58,8 +58,8 @@ defmodule OptionDataCacheTests do
     { :ok, pid } = OptionCalc.Services.OptionDataCache.start_link
     OptionCalc.Services.OptionDataCache.set_value(pid, {:expirations, "AAPL"}, 123)
     OptionCalc.Services.OptionDataCache.set_value(pid, {:expirations, "AAPL"}, 234)
-    Agent.get(pid, fn %{ {:expirations, "AAPL"} => %{cached_on: _, status: :ready, value: 234} } = state -> state  end)
-    assert true
+    result = Agent.get(pid, fn %{ {:expirations, "AAPL"} => %{cached_on: _, status: :ready, value: 234} } = state -> state  end)
+    assert result != nil
   end
 
   test "OptionDataCache set_expirations" do
