@@ -17,6 +17,7 @@ config :option_calc, OptionCalc.Endpoint,
   cache_static_manifest: "priv/static/manifest.json"
 
 config :option_calc, :option_repo, OptionCalc.Repositories.OptionRepository
+config :option_calc, :quote_repo, OptionCalc.Repositories.QuoteRepository
 
 # Do not print debug messages in production
 config :logger, level: :info

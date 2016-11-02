@@ -19,3 +19,4 @@ config :option_calc, OptionCalc.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :option_calc, :option_repo, OptionCalc.Mocks.Repositories.OptionRepositoryMock
+config :option_calc, :quote_repo, OptionCalc.Mocks.Repositories.QuoteRepositoryMock
