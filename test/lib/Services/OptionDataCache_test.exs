@@ -42,26 +42,6 @@ defmodule OptionDataCacheTests do
     assert results2 == results3
   end
 
-  test "OptionDataCache is_valid is valid" do
-    valid = %{ cached_on: DateTime.utc_now }
-    result = OptionCalc.Services.OptionDataCache.is_valid(valid)
-    assert result == true
-  end
-
-  test "OptionDataCache is_valid is invalid" do
-    invalid = %{ cached_on: DateTime.from_unix!(1) }
-    result = OptionCalc.Services.OptionDataCache.is_valid(invalid)
-    assert result == false
-  end
-
-  test "OptionDataCache set_value" do
-    { :ok, pid } = OptionCalc.Services.OptionDataCache.start_link
-    OptionCalc.Services.OptionDataCache.set_value(pid, {:expirations, "AAPL"}, 123)
-    OptionCalc.Services.OptionDataCache.set_value(pid, {:expirations, "AAPL"}, 234)
-    result = Agent.get(pid, fn %{ {:expirations, "AAPL"} => %{cached_on: _, status: :ready, value: 234} } = state -> state  end)
-    assert result != nil
-  end
-
   test "OptionDataCache set_expirations" do
     { :ok, pid } = OptionCalc.Services.OptionDataCache.start_link
     OptionCalc.Services.OptionDataCache.set_expirations(pid, "AAPL", 123)

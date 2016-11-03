@@ -15,9 +15,8 @@ defmodule OptionCalc.Utilities.GenDataCache do
                 Task.async(fn -> cached.value end)
             else
                 Task.async(fn ->
-                result = Agent.get_and_update(pid, fn x -> { query.(key), x } end) #blocks other request to agent pid so other processes don't call the query function
-                set_value(pid, key, result)
-                result
+                    #Agent.get_and_update blocks other request to agent pid so other processes don't call the query function
+                    get_value(pid, key, query) 
                 end)
             end
         end
@@ -25,11 +24,11 @@ defmodule OptionCalc.Utilities.GenDataCache do
         def get_value(pid, key, query) do
             Agent.get_and_update(pid, fn cache -> 
                 if cached = cache[key] do
-                { cached.value, cache }
+                    { cached.value, cache }
                 else
-                result = query.(key)
-                cached_value = %{ value: result, cached_on: DateTime.utc_now, status: :ready }
-                { result, Map.put(cache, key, cached_value) }
+                    result = query.(key)
+                    cached_value = %{ value: result, cached_on: DateTime.utc_now, status: :ready }
+                    { result, Map.put(cache, key, cached_value) }
                 end
             end)
         end
