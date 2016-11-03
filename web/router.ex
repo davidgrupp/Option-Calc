@@ -27,5 +27,7 @@ defmodule OptionCalc.Router do
 
     post "/chart/points", ChartController, :points
     get "/chart/points", ChartController, :points
+
+    get "/option/expirations", OptionController, :expirations
   end
 end

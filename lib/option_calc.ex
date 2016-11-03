@@ -14,6 +14,7 @@ defmodule OptionCalc do
       supervisor(OptionCalc.Endpoint, []),
       # Start your own worker by calling: OptionCalc.Worker.start_link(arg1, arg2, arg3)
       # worker(OptionCalc.Worker, [arg1, arg2, arg3]),
+      worker(OptionCalc.Services.QuoteDataCache, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

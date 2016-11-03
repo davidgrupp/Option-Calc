@@ -16,6 +16,7 @@ defmodule OptionCalc.Utilities.GenDataCache do
             else
                 Task.async(fn ->
                     #Agent.get_and_update blocks other request to agent pid so other processes don't call the query function
+                    #get_value will check again if the value is in the cache in the case where race conditions got to this branch
                     get_value(pid, key, query) 
                 end)
             end
