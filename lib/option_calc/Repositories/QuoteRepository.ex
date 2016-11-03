@@ -19,9 +19,16 @@ defmodule OptionCalc.Repositories.QuoteRepository do
 	Task.async(fn ->
 		%{ body: content, status_code: 200 } = HTTPoison.get!(URI.encode(url))
 		%{ "query" => %{ "results" => %{ "quote" => quote } } } = Poison.decode!(content)
-		quote
-		|> Enum.map(fn q ->
-					%OptionCalc.Quote {
+		if(is_list(quote)) do
+			quote |> Enum.map(fn q ->map_quote (q) end)
+		else
+		    map_quote(quote)
+		end
+	end)
+  end
+  
+  defp map_quote(q) do
+    %OptionCalc.Quote {
 						dayslow: q["DaysLow"] |> String.to_float,
 						dayshigh: q["DaysHigh"] |> String.to_float,
 						symbol: q["Symbol"],
@@ -35,8 +42,6 @@ defmodule OptionCalc.Repositories.QuoteRepository do
 						ask: q["Ask"] |> String.to_float,
 						bid: q["Bid"] |> String.to_float
 					}
-				end)
-	end)
   end
-  
+
 end
