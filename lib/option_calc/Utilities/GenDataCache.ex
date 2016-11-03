@@ -8,6 +8,14 @@ defmodule OptionCalc.Utilities.GenDataCache do
             Agent.start_link(fn-> %{ } end)
         end
 
+        def start_link(name) do
+            Agent.start_link(fn-> %{ } end, name: name)
+        end
+
+        def get_value_async(key, query) do
+            get_value_async({__MODULE__, node}, key, query)
+        end
+
         def get_value_async(pid, key, query) do
             cached = Agent.get(pid, fn x -> x[key] end)
 
