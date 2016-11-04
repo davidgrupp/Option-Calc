@@ -4,34 +4,26 @@ defmodule OptionCalc.Utilities.GenDataCache do
     quote location: :keep do
         @timeout unquote(timeout) 
 
-        def start_link do
-            Agent.start_link(fn-> %{ } end)
+        def start_link() do
+            Agent.start_link(fn-> %{ } end, name: __MODULE__)
         end
 
-        def start_link(name) do
-            Agent.start_link(fn-> %{ } end, name: name)
-        end
-
-        def get_value_async(key, query) do
-            get_value_async({__MODULE__, node}, key, query)
-        end
-
-        def get_value_async(pid, key, query) do
-            cached = Agent.get(pid, fn x -> x[key] end)
+        def get_value_async(process, key, query) do
+            cached = Agent.get(process, fn x -> x[key] end)
 
             if cached != nil && is_valid(cached) do
                 Task.async(fn -> cached.value end)
             else
                 Task.async(fn ->
-                    #Agent.get_and_update blocks other request to agent pid so other processes don't call the query function
+                    #Agent.get_and_update blocks other request to agent process so other processes don't call the query function
                     #get_value will check again if the value is in the cache in the case where race conditions got to this branch
-                    get_value(pid, key, query) 
+                    get_value(process, key, query) 
                 end)
             end
         end
 
-        def get_value(pid, key, query) do
-            Agent.get_and_update(pid, fn cache -> 
+        def get_value(process, key, query) do
+            Agent.get_and_update(process, fn cache -> 
                 if cached = cache[key] do
                     { cached.value, cache }
                 else
@@ -42,9 +34,9 @@ defmodule OptionCalc.Utilities.GenDataCache do
             end)
         end
 
-        def set_value(pid, key, value) do
+        def set_value(process, key, value) do
             cached_value = %{ value: value, cached_on: DateTime.utc_now, status: :ready }
-            Agent.update(pid, fn state -> Map.put(state, key, cached_value) end)
+            Agent.update(process, fn state -> Map.put(state, key, cached_value) end)
         end
 
         def is_valid(cached_data) do

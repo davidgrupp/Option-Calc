@@ -13,10 +13,12 @@ config :logger, level: :warn
 config :option_calc, OptionCalc.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "123456",
   database: "option_calc_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :option_calc, :option_repo, OptionCalc.Mocks.Repositories.OptionRepositoryMock
 config :option_calc, :quote_repo, OptionCalc.Mocks.Repositories.QuoteRepositoryMock
+
+config :option_calc, :nodes, %{ :"n1@localhost" => :web, :"n2@localhost" => :cache }

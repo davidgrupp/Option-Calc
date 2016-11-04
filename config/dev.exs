@@ -37,7 +37,7 @@ config :phoenix, :stacktrace_depth, 20
 config :option_calc, OptionCalc.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "123456",
   database: "option_calc_dev",
   hostname: "localhost",
   pool_size: 10
@@ -45,3 +45,5 @@ config :option_calc, OptionCalc.Repo,
 
 config :option_calc, :option_repo, OptionCalc.Repositories.OptionRepository
 config :option_calc, :quote_repo, OptionCalc.Repositories.QuoteRepository
+
+config :option_calc, :nodes, %{ :"n1@localhost" => :web, :"n2@localhost" => :cache }
