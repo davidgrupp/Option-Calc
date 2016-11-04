@@ -29,19 +29,26 @@ defmodule OptionCalc.Repositories.QuoteRepository do
   
   defp map_quote(q) do
     %OptionCalc.Quote {
-						dayslow: q["DaysLow"] |> String.to_float,
-						dayshigh: q["DaysHigh"] |> String.to_float,
+						dayslow: q["DaysLow"] |> to_float_or_default,
+						dayshigh: q["DaysHigh"] |> to_float_or_default,
 						symbol: q["Symbol"],
 						name: q["Name"],
-						percentchange: q["PercentChange"] |> String.trim("%") |> String.to_float,
-						change: q["Change"] |> String.to_float,
-						volume: q["Volume"] |> String.to_integer(10),
-						shortratio: q["ShortRatio"] |> String.to_float,
-						open: q["Open"] |> String.to_float,
-						last: q["LastTradePriceOnly"] |> String.to_float,
-						ask: q["Ask"] |> String.to_float,
-						bid: q["Bid"] |> String.to_float
+						percentchange: q["PercentChange"] |> String.trim("%") |> to_float_or_default,
+						change: q["Change"] |> to_float_or_default,
+						volume: q["Volume"] |> to_int_or_default,
+						shortratio: q["ShortRatio"] |> to_float_or_default,
+						open: q["Open"] |> to_float_or_default,
+						last: q["LastTradePriceOnly"] |> to_float_or_default,
+						ask: q["Ask"] |> to_float_or_default,
+						bid: q["Bid"] |> to_float_or_default
 					}
   end
+
+	defp to_float_or_default(v, default \\ nil)
+	defp to_float_or_default(nil, default), do: default
+	defp to_float_or_default(value, _), do: value |> String.to_float
+	defp to_int_or_default(v, default \\ nil)
+	defp to_int_or_default(nil, default), do: default
+	defp to_int_or_default(value, _), do: value |> String.to_integer(10)
 
 end
