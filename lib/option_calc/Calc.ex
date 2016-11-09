@@ -9,7 +9,7 @@ defmodule OptionCalc.Calc do
     end
     
     
-    def option_value(_, _, _, _, quantity) when quantity == 0, do: 0
+    def option_value(_, _, _, _, 0), do: 0
     
     #call buy ITM
     def option_value(value, strike, price, :call, quantity) when quantity > 0 and value > strike do
