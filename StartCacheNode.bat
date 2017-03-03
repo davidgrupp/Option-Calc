@@ -1,0 +1,1 @@
+iex --sname n2@localhost -S mix
